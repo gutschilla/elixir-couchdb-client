@@ -3,10 +3,12 @@ defmodule CouchdbClient.Mixfile do
 
   def project do
     [app: :couchdb_client,
-     version: "0.0.1",
+     version: "0.1.0",
      elixir: "~> 1.1",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     package: package,
+     description: description,
      deps: deps]
   end
 
@@ -32,4 +34,22 @@ defmodule CouchdbClient.Mixfile do
       {:httpoison, "~> 0.7.2"}
     ]
   end
+
+  defp description do
+    """
+    A partial yet functional CouchDB client, with attachment support.
+    """
+  end
+
+  defp package do
+    [
+     files: ["lib", "mix.exs", "README", "LICENSE", "test" ],
+     contributors: ["Martin Gutsch"],
+     licenses: ["MIT"],
+     links: %{
+        "GitHub" => "https://github.com/gutschilla/elixir-couchdb-client"
+      }
+     ]
+  end
+
 end
