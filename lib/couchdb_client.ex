@@ -52,6 +52,23 @@ defmodule CouchdbClient do
                 _data: body
             }
         end
+        
+        @doc """
+            Performs a HEAD request to CouchDB to retrieve the current revision
+            tag. This is useful if you'd like to attach files to a document you
+            don't actually have already loaded.
+            
+            Returns a document with data set to nil to prevent this document to
+            be saved.
+        """
+        def get_rev( document ) do
+            response = document |> url |> HTTPoison.head!
+            headers  = response.headers
+            List.keyfind( headers, "ETag", 0 )
+                |> elem(1)
+                |> String.lstrip( ?" )
+                |> String.rstrip( ?" )            
+        end
 
         @doc """
             Inserts document. If document has no ID, a server-generated id will
@@ -104,18 +121,76 @@ defmodule CouchdbClient do
         
     end
     defmodule Attachment do
-        @doc """
-            This module is just a stub, currently.
+        @vsn "0.1.0"
+        @moduledoc """
+            Add, delete and retrieve attachments to/from a document
         """
-        defstruct filename: nil, content: '', content_type: "text/plain"
+        defstruct filename: nil, content: "", content_type: "text/plain;charset=utf8"
         
+        @doc """
+            Returns the URL of an attachments, including revision query
+            parameter. If the document hasn't been retrieved yet, a
+            Document.get_rev (HEAD call to CouchDB) will be performed to
+            retrieve the current revision identifier "rev"
+        """
+        def url( document, attachment ) do
+            rev = case document._rev do
+                nil -> Document.get_rev( document )
+                _   -> document._rev
+            end
+            Document.url( document ) <> "/" <> attachment.filename <> "?rev=" <> rev
+        end
+        
+        @doc """
+            Adds attachment to document. Default content_type is
+            "text/plain;content=utf8". Returns :ok
+            
+            Examples:
+            
+            CouchdbClient.Attachment.attach(
+                document, %{ filename: "test.txt", content: "Äktschn!" }    
+            )
+            
+            CouchdbClient.Attachment.attach(
+                document,
+                %CouchdbClient.Attachment{
+                    filename: "test.jpeg",
+                    content: File.read!("/home/gutschilla/test.jpeg"),
+                    content_type: "image/jpeg"
+                }
+            )
+        """
         def attach( document, attachment ) do
+            url = Attachment.url document, attachment
+            content_list = :binary.bin_to_list attachment.content
+            headers = [
+                { "Content-Length", length( content_list ) },
+                { "Content-Type", attachment.content_type }
+            ]
+            response = HTTPoison.put! url, attachment.content, headers
+            201 = response.status_code
+            :ok
         end
         
+        @doc """
+            Removes attachment from document. Returns :ok
+        """
         def delete( document, filename ) do
+            url = Attachment.url document, %Attachment{ filename: filename }
+            response = HTTPoison.delete! url
+            200 = response.status_code
+            :ok
         end
         
+        @doc """
+            Retrieves attachment from document. Returns { content, content_type }
+        """
         def fetch( document, filename ) do
+            url = Attachment.url document, %Attachment{ filename: filename }
+            response = HTTPoison.get! url, [], []
+            200 = response.status_code
+            content_type = List.keyfind( response.headers, "Content-Type", 0 )|> elem( 1 )
+            { response.body, content_type }
         end
     end
 end
