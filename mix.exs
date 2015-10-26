@@ -44,7 +44,7 @@ defmodule CouchdbClient.Mixfile do
   defp package do
     [
      files: ["lib", "mix.exs", "README", "LICENSE", "test" ],
-     contributors: ["Martin Gutsch"],
+     maintainers: ["Martin Gutsch"],
      licenses: ["MIT"],
      links: %{
         "GitHub" => "https://github.com/gutschilla/elixir-couchdb-client"
