@@ -1,6 +1,6 @@
 # CouchdbClient
 
-A minimal yet functional CouchDB client, with attachments.
+A minimal yet functional CouchDB client, with attachment support.
 
 ## Usage
 
