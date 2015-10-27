@@ -43,7 +43,7 @@ defmodule CouchdbClient.Mixfile do
 
   defp package do
     [
-     files: ["lib", "mix.exs", "README", "LICENSE", "test" ],
+     files: ["lib", "mix.exs", "README.md", "LICENSE", "test" ],
      maintainers: ["Martin Gutsch"],
      licenses: ["MIT"],
      links: %{
