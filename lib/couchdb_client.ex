@@ -56,6 +56,9 @@ defmodule CouchdbClient do
     def get_rev( document ) do
         Doc.get_rev document, db
     end
+    def set( document, data ) do
+        Doc.set( document, data )
+    end
     def insert( document ) do
         Doc.insert document, db
     end
