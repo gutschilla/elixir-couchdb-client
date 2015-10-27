@@ -1,6 +1,14 @@
 # CouchdbClient
 
-A minimal yet functional CouchDB client, with attachment support.
+A minimal yet functional CouchDB client, with attachment support. Currently, this is a result of an evening hacking so expect quite a few API changes until 1.0.
+
+## Error handling
+
+Not in here ;-) No exception handling is performed. Server responses are expected to be 200 OK or 201 CREATED. If anything fails, the code will simply crash (with a badmatch or the like). 
+
+## Future development
+
+There will be `method` functions that eitehr return `{:ok, result}` or `{:error, reason}` tuples and corresponding `method!` bang!-functions either return the result or crash with some sensible error, most likely the bare HTTP result from HTTPpoison.
 
 ## Usage
 
@@ -33,16 +41,16 @@ doc = Document.load doc
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+The package can be installed as:
 
   1. Add elixir_couchdb_client to your list of dependencies in `mix.exs`:
 
         def deps do
-          [{:elixir_couchdb_client, "~> 0.0.1"}]
+          [{:couchdb_client, "~> 0.1.0"}]
         end
 
-  2. Ensure elixir_couchdb_client is started before your application:
+  2. Ensure couchdb_client is started before your application:
 
         def application do
-          [applications: [:elixir_couchdb_client]]
+          [applications: [:couchdb_client]]
         end
