@@ -1,5 +1,6 @@
 defmodule CouchdbClient do
-    @vsn "0.2.1"
+
+    @vsn "0.2.3"
     
     @moduledoc """
     This module conveniently interfaces/proxies 
@@ -38,7 +39,33 @@ defmodule CouchdbClient do
     alias CouchdbClient.Document,   as: Doc
     alias CouchdbClient.Attachment, as: Attachment
 
-    def start( db_options ) do
+    use Application
+    
+    # See http://elixir-lang.org/docs/stable/elixir/Application.html
+    # for more information on OTP Applications
+    def start(_type, _args) do
+        import Supervisor.Spec, warn: false
+      
+        children = [
+          # Define workers and child supervisors to be supervised
+          # worker(NavigationTree.Worker, [arg1, arg2, arg3])
+            worker( Repo, [
+                [
+                    scheme: Application.get_env(:couchdb_client, :scheme ) || "http",
+                    host:   Application.get_env(:couchdb_client, :host   ) || "127.0.0.1",
+                    post:   Application.get_env(:couchdb_client, :port   ) || 5984,
+                    name:   Application.get_env(:couchdb_client, :name   ),
+                ]
+            ] )
+        ]
+      
+        # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
+        # for other strategies and supported options
+        opts = [strategy: :one_for_one, name: NavigationTree.Supervisor]
+        Supervisor.start_link(children, opts)
+    end
+
+    def start_repo( db_options ) do
         Repo.start_link db_options
     end
     def db do

@@ -8,13 +8,19 @@ use Mix.Config
 # if you want to provide default values for your application for
 # 3rd-party users, it should be done in your "mix.exs" file.
 
+config :couchdb_client,
+    scheme: "http",
+    host:   "127.0.0.1",
+    port:   5984,
+    name:   "test_database"
+
 # You can configure for your application as:
 #
-#     config :elixir_couchdb_client, key: :value
+#     config :couchdb_client, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:elixir_couchdb_client, :key)
+#     Application.get_env(:couchdb_client, :key)
 #
 # Or configure a 3rd-party app:
 #
