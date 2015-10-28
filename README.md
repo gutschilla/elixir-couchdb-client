@@ -25,25 +25,36 @@ For full documentation, see inline @doc or use ex_doc to generate docs.
 
 The package can be installed as:
 
-  1. Add couchdb_client to your list of dependencies in `mix.exs`:
-
-        def deps do
-          [{:couchdb_client, "~> 0.3.2"}]
-        end
-
-  2. Configure CouchDB connection parameters in your `config.exs`
-
-        config :couchdb_client,
-            scheme: "http",
-            host:   "127.0.0.1",
-            port:   5984,
-            name:   "you_database_name"
-
-  3. Ensure couchdb_client is started before your application:
-
-        def application do
-          [applications: [:couchdb_client]]
-        end
+    1. Add couchdb_client to your list of dependencies in `mix.exs`:
+    
+          def deps do
+            [{:couchdb_client, "~> 0.3.2"}]
+          end
+    
+    2. Configure CouchDB connection parameters in your `config.exs`
+    
+          config :couchdb_client,
+              scheme: "http",
+              host:   "127.0.0.1",
+              port:   5984,
+              name:   "you_database_name"
+    
+    3. Ensure couchdb_client is started before your application:
+    
+          def application do
+            [applications: [:couchdb_client]]
+          end
+          
+    4. Start accessing CouchDB
+      
+          alias CouchdbClient.Document, as: Doc
+          CouchdbClient.insert %Doc{ id: "super-id", data: %{ "foo" => "bar" } }
+          # and later, load/update
+          CouchdbClient.load( "super-id" )
+          # adds key boom (foo will still be there)
+          |> CouchdbClient.set( doc, %{ "boom" => "bang!" } )
+          # instead of insert/update you may just use "save"
+          |> CouchdbClient.update() 
 
 
 ### Using CouchdbClient's wrapper
@@ -51,7 +62,10 @@ The package can be installed as:
 This will save the connection info in an Elixir.Agent process.
 
 ```
+# The call to CouchdbClient.start can be omitted if started as OTP App
 CouchdbClient.start host: "10.0.0.1", port: 5984, name: "test_database"
+
+# It'll sure come handy to alias CouchdbClient.Document
 doc = %CouchdbClient.Document{ data: %{ "foo" => "bar" } }
 doc = CouchdbClient.save doc
 doc = CouchdbClient.set doc, %{ "boom" => "bang" }
