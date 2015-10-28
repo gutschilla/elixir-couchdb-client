@@ -35,7 +35,6 @@ defmodule CouchdbClient do
     """
     
     alias CouchdbClient.Repository, as: Repo
-    alias CouchdbClient.Database,   as: DB
     alias CouchdbClient.Document,   as: Doc
     alias CouchdbClient.Attachment, as: Attachment
 
