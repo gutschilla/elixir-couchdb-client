@@ -49,12 +49,11 @@ The package can be installed as:
       
           alias CouchdbClient.Document, as: Doc
           CouchdbClient.insert %Doc{ id: "super-id", data: %{ "foo" => "bar" } }
-          # and later, load/update
-          CouchdbClient.load( "super-id" )
-          # adds key boom (foo will still be there)
-          |> CouchdbClient.set( doc, %{ "boom" => "bang!" } )
-          # instead of insert/update you may just use "save"
-          |> CouchdbClient.update() 
+
+          # and later ...
+          CouchdbClient.load "super-id" 
+          |> CouchdbClient.set %{ "boom" => "bang!" } # adds key boom
+          |> CouchdbClient.update
 
 
 ### Using CouchdbClient's wrapper
