@@ -21,6 +21,31 @@ HTTPpoison.
 
 For full documentation, see inline @doc or use ex_doc to generate docs.
 
+### Using as OTP Application
+
+The package can be installed as:
+
+  1. Add elixir_couchdb_client to your list of dependencies in `mix.exs`:
+
+        def deps do
+          [{:couchdb_client, "~> 0.3.2"}]
+        end
+
+  2. Configure CouchDB connection parameters in your `config.exs`
+
+        config :couchdb_client,
+            scheme: "http",
+            host:   "127.0.0.1",
+            port:   5984,
+            name:   "you_database_name"
+
+  3. Ensure couchdb_client is started before your application:
+
+        def application do
+          [applications: [:couchdb_client]]
+        end
+
+
 ### Using CouchdbClient's wrapper
 
 This will save the connection info in an Elixir.Agent process.
@@ -63,19 +88,3 @@ doc = Document.load doc, db
 :ok = Attachment.delete doc, "test.jpg", db
 { binary, content_type } = Attachment.fetch doc, "test.txt", db
 ```
-
-## Installation
-
-The package can be installed as:
-
-  1. Add elixir_couchdb_client to your list of dependencies in `mix.exs`:
-
-        def deps do
-          [{:couchdb_client, "~> 0.1.0"}]
-        end
-
-  2. Ensure couchdb_client is started before your application:
-
-        def application do
-          [applications: [:couchdb_client]]
-        end
