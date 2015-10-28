@@ -25,7 +25,7 @@ For full documentation, see inline @doc or use ex_doc to generate docs.
 
 The package can be installed as:
 
-  1. Add elixir_couchdb_client to your list of dependencies in `mix.exs`:
+  1. Add couchdb_client to your list of dependencies in `mix.exs`:
 
         def deps do
           [{:couchdb_client, "~> 0.3.2"}]
