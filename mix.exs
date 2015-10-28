@@ -3,7 +3,7 @@ defmodule CouchdbClient.Mixfile do
 
   def project do
     [app: :couchdb_client,
-     version: "0.2.3",
+     version: "0.2.4",
      elixir: "~> 1.1",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -32,7 +32,9 @@ defmodule CouchdbClient.Mixfile do
   defp deps do
     [
       {:poison, "~> 1.5"},
-      {:httpoison, "~> 0.7.2"}
+      {:httpoison, "~> 0.7.2"},
+      {:earmark, ">= 0.0.0"},
+      {:ex_doc, ">= 0.10.0"}
     ]
   end
 

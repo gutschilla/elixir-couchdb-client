@@ -5,7 +5,7 @@ defmodule CouchdbClient.Repository do
     ## Examples
     
     iex> CouchdbClient.Repository.start_link name: "test_database"
-    {:ok, _PID }
+    { :ok, _PID }
     iex> CouchdbClient.Repository.get
     %CouchdbClient.Database{host: "127.0.0.1", name: "test_database", port: 5984, scheme: "http"}
     iex> CouchdbClient.Repository.stop
