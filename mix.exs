@@ -3,7 +3,7 @@ defmodule CouchdbClient.Mixfile do
 
   def project do
     [app: :couchdb_client,
-     version: "0.2.4",
+     version: "0.2.5",
      elixir: "~> 1.1",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,

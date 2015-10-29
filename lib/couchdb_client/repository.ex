@@ -33,4 +33,11 @@ defmodule CouchdbClient.Repository do
     def get do
       Agent.get( @name, fn( data ) -> data end )
     end
+    
+    @doc "Changes the database on the current server"
+    def change_db( name ) do
+        Agent.update @name, fn data ->
+            Map.put data, :name, name
+        end
+    end
 end

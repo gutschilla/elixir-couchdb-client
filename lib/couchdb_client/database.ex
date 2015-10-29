@@ -35,9 +35,18 @@ defmodule CouchdbClient.Database do
         ], ""
     end
     
+    def info database do
+        response = database
+        |> url
+        |> HTTPoison.get!
+        if response.status_code != 200, do: raise Error, message: inspect response
+        Poison.decode! response.body
+    end
+
     def all_docs database do
         response = database
         |> url
+        |> (fn url -> url <> "/_all_docs" end).()
         |> HTTPoison.get!
         if response.status_code != 200, do: raise Error, message: inspect response
         Poison.decode! response.body
